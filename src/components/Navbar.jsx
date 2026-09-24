@@ -23,7 +23,7 @@ export const Navbar = ({ onOpenQuoteModal, onOpenPortfolio }) => {
     // { name: 'Methodology', href: '#methodology', isModal: false },
     { name: 'Testimonials', href: '#testimonials', isModal: false },
     { name: 'FAQ', href: '#faq', isModal: false },
-    { name: 'Enquiry', href: '#enquiry', isModal: false },
+    // { name: 'Enquiry', href: '#enquiry', isModal: false },
     { name: 'About Us', href: '#about', isModal: false },
   ];
 

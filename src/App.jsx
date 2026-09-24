@@ -86,7 +86,7 @@ export default function App() {
       <div
         className={`min-h-screen bg-[#fafafa] text-slate-800 flex flex-col font-sans selection:bg-[#F5A623] selection:text-slate-950 transition-all duration-500 ${
           !isLeadSubmitted
-            ? 'h-screen overflow-hidden filter blur-sm pointer-events-none select-none'
+            ? 'h-screen overflow-hidden filter blur-md pointer-events-none select-none'
             : ''
         }`}
         aria-hidden={!isLeadSubmitted}
