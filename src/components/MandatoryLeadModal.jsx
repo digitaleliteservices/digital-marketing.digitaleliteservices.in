@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   User,
   Mail,
@@ -10,11 +10,12 @@ import {
   Loader2,
   ShieldCheck,
   Sparkles,
+  X,
 } from 'lucide-react';
 import { submitLeadEnquiry } from '../services/api';
 import LogoImg from '../assets/images/logo.png';
 
-export const MandatoryLeadModal = ({ isOpen, onSuccess }) => {
+export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -25,6 +26,16 @@ export const MandatoryLeadModal = ({ isOpen, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose?.();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -92,15 +103,33 @@ export const MandatoryLeadModal = ({ isOpen, onSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto bg-slate-900/35 backdrop-blur-xl sm:backdrop-blur-2xl animate-in fade-in duration-300">
-      <div className="relative w-full max-w-lg bg-white/95 backdrop-blur-2xl text-slate-900 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3),0_0_1px_1px_rgba(0,0,0,0.06)] border border-slate-200/90 overflow-hidden my-auto animate-in zoom-in-95 duration-200">
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-300"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose?.();
+        }
+      }}
+    >
+      <div className="relative w-full max-w-lg bg-white/95 backdrop-blur-xs text-slate-900 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3),0_0_1px_1px_rgba(0,0,0,0.06)] border border-slate-200/90 overflow-hidden my-auto animate-in zoom-in-95 duration-200">
         
+        {/* Close Button */}
+        <button
+          type="button"
+          onClick={() => onClose?.()}
+          className="absolute top-4 right-4 z-20 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900 transition-colors cursor-pointer border border-slate-200/60 shadow-xs"
+          aria-label="Close form"
+          title="Close and view landing page"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
         {/* Subtle Decorative Ambient Lighting */}
         <div className="absolute -top-16 -right-16 w-56 h-56 bg-amber-400/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Top Header Banner */}
-        <div className="relative p-6 sm:p-7 border-b border-slate-100 bg-gradient-to-b from-slate-50/90 via-slate-50/40 to-white">
+        <div className="relative p-6 sm:p-7 pr-16 border-b border-slate-100 bg-gradient-to-b from-slate-50/90 via-slate-50/40 to-white">
           <div className="flex items-center justify-between gap-4 mb-3">
             <div className="flex items-center gap-2">
               <div className="bg-[#080E21] px-3.5 py-1.5 rounded-xl shadow-xs border border-slate-800 flex items-center">

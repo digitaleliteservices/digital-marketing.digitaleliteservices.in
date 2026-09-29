@@ -6,6 +6,7 @@ export const ConsultationModal = ({
   isOpen,
   onClose,
   defaultService = '',
+  onSuccess,
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -71,8 +72,16 @@ export const ConsultationModal = ({
         message: formData.message,
       });
 
+      try {
+        sessionStorage.setItem('des_lead_submitted', 'true');
+        localStorage.setItem('des_lead_submitted', 'true');
+      } catch (err) {
+        // Ignore storage errors
+      }
+
       setSubmitting(false);
       setSubmitted(true);
+      onSuccess?.();
     } catch (err) {
       setSubmitting(false);
       setErrorMsg(err.message || 'Failed to submit enquiry. Please try again.');

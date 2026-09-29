@@ -72,7 +72,7 @@ export const Hero = ({ onOpenConsultation, onExploreServices }) => {
             </div>
 
             {/* Main Title */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-white tracking-tight leading-[1.2]">
+            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-white tracking-tight " style={{lineHeight: 1.1}}>
               Digital Marketing Services <br className="hidden sm:inline" />
               in Bangalore That Drive <br />
               <span className="text-[#F5A623]">Real Business Growth</span>

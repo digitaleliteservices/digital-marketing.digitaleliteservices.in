@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { MarketingTechStackBanner } from './components/MarketingTechStackBanner';
+import { ClientsSection } from './components/ClientsSection';
 import { FragmentedTrapSection } from './components/FragmentedTrapSection';
 import { AboutSection } from './components/AboutSection';
 import { ServicesSection, servicesData } from './components/ServicesSection';
@@ -9,6 +10,7 @@ import { SeoDeepDiveSection } from './components/SeoDeepDiveSection';
 import { PpcDeepDiveSection } from './components/PpcDeepDiveSection';
 import { SocialMediaDeepDiveSection } from './components/SocialMediaDeepDiveSection';
 import { ConversionArchitectureSection } from './components/ConversionArchitectureSection';
+import { ShowcaseSection } from './components/ShowcaseSection';
 import { MethodologySection } from './components/MethodologySection';
 import { CustomerJourneySection } from './components/CustomerJourneySection';
 import { LocalSection } from './components/LocalSection';
@@ -21,6 +23,7 @@ import { CtaBanner } from './components/CtaBanner';
 import { Footer } from './components/Footer';
 import { ConsultationModal } from './components/ConsultationModal';
 import { MandatoryLeadModal } from './components/MandatoryLeadModal';
+import { RightSideLeadPopup } from './components/RightSideLeadPopup';
 import { ServiceDetailModal } from './components/ServiceDetailModal';
 import { PortfolioModal } from './components/PortfolioModal';
 import { LegalModal } from './components/LegalModal';
@@ -37,6 +40,32 @@ export default function App() {
       return false;
     }
   });
+
+  // Track if initial mandatory modal is open (now fully closable by user)
+  const [mandatoryModalOpen, setMandatoryModalOpen] = useState(() => {
+    try {
+      // If already submitted lead, never open
+      const submitted =
+        sessionStorage.getItem('des_lead_submitted') === 'true' ||
+        localStorage.getItem('des_lead_submitted') === 'true';
+      if (submitted) return false;
+
+      // Check if user dismissed mandatory modal in current session
+      const dismissed = sessionStorage.getItem('des_mandatory_dismissed') === 'true';
+      return !dismissed;
+    } catch {
+      return true;
+    }
+  });
+
+  const handleCloseMandatoryModal = () => {
+    setMandatoryModalOpen(false);
+    try {
+      sessionStorage.setItem('des_mandatory_dismissed', 'true');
+    } catch {
+      // Ignore storage errors
+    }
+  };
 
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const [selectedServiceForQuote, setSelectedServiceForQuote] = useState('Search Engine Optimization (SEO)');
@@ -72,24 +101,26 @@ export default function App() {
 
   const handleMandatoryLeadSuccess = () => {
     setIsLeadSubmitted(true);
+    setMandatoryModalOpen(false);
   };
 
   return (
     <>
-      {/* Mandatory Lead Gate: Shown while opening landing page until user submits */}
+      {/* Mandatory Lead Gate: Shown while opening landing page, now fully closable */}
       <MandatoryLeadModal
-        isOpen={!isLeadSubmitted}
+        isOpen={mandatoryModalOpen}
+        onClose={handleCloseMandatoryModal}
         onSuccess={handleMandatoryLeadSuccess}
       />
 
-      {/* Main Landing Page Content - Gated and blurred until user fills mandatory lead form */}
+      {/* Main Landing Page Content - Gated and blurred until user closes or submits mandatory lead form */}
       <div
         className={`min-h-screen bg-[#fafafa] text-slate-800 flex flex-col font-sans selection:bg-[#F5A623] selection:text-slate-950 transition-all duration-500 ${
-          !isLeadSubmitted
+          mandatoryModalOpen
             ? 'h-screen overflow-hidden filter blur-md pointer-events-none select-none'
             : ''
         }`}
-        aria-hidden={!isLeadSubmitted}
+        aria-hidden={mandatoryModalOpen}
       >
         {/* Fixed Navigation Bar */}
         <Navbar 
@@ -104,8 +135,11 @@ export default function App() {
             onExploreServices={scrollToServices}
           />
 
-          {/* Marketing Tech Stack Banner: Google Meta, Google Ads, Google Search Console, Google My Business */}
+          {/* Marketing Tech Stack Banner: Google, Meta, Google Ads, Google Search Console, Google My Business */}
           <MarketingTechStackBanner />
+
+          {/* Clients Section: Dual-direction infinite logo marquees */}
+          <ClientsSection />
 
           {/* Section 2: The Fragmented Marketing Trap vs The DES Growth Engine */}
           <FragmentedTrapSection
@@ -141,6 +175,9 @@ export default function App() {
           <ConversionArchitectureSection
             onTalkToWebTeam={() => handleOpenQuoteModal('Website Design & Conversion Funnel')}
           />
+
+          {/* Section: SHOWCASING OUR WORK - Continuous Right-to-Left Showcase Marquee */}
+          <ShowcaseSection />
 
           {/* Section 9: Methodology - Our 5-Step Strategic Growth Process */}
           <MethodologySection />
@@ -193,6 +230,7 @@ export default function App() {
           isOpen={quoteModalOpen}
           onClose={() => setQuoteModalOpen(false)}
           defaultService={selectedServiceForQuote}
+          onSuccess={() => setIsLeadSubmitted(true)}
         />
 
         <ServiceDetailModal
@@ -213,6 +251,13 @@ export default function App() {
           onClose={() => setLegalModalType(null)}
         />
       </div>
+
+      {/* Floating Lead Popup on the right side of the landing page: closable and reappears 40s after closing */}
+      <RightSideLeadPopup
+        isLandingPageOpen={!mandatoryModalOpen}
+        isLeadSubmitted={isLeadSubmitted}
+        onLeadSubmitted={() => setIsLeadSubmitted(true)}
+      />
     </>
   );
 }
