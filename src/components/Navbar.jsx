@@ -64,7 +64,7 @@ export const Navbar = ({ onOpenQuoteModal, onOpenPortfolio }) => {
           </nav>
 
           {/* Right Action Button & Mobile Toggle */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={() => onOpenQuoteModal()}
               className="button hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-[#F5A623] hover:bg-[#e69818] active:scale-95 text-slate-950 text-xs md:text-sm rounded-full shadow-md shadow-amber-500/20 transition-all duration-150 cursor-pointer whitespace-nowrap"
@@ -72,6 +72,16 @@ export const Navbar = ({ onOpenQuoteModal, onOpenPortfolio }) => {
               <span>Get a Free Quote</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </button>
+
+            {/* Mobile Call Now Button (to the left of hamburger menu) */}
+            <a
+              href="tel:+916366930178"
+              className="lg:hidden inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F5A623] hover:bg-[#e69818] active:scale-95 text-slate-950 font-semibold text-xs rounded-full shadow-md shadow-amber-500/20 transition-all duration-150 cursor-pointer whitespace-nowrap"
+              aria-label="Call Now"
+            >
+              <Phone className="w-3.5 h-3.5" />
+              <span>Call Now</span>
+            </a>
 
             {/* Mobile Menu Button */}
             <button
