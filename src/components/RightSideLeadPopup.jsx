@@ -7,6 +7,7 @@ import {
   MessageSquare,
   Sparkles,
   Send,
+  ArrowRight,
   Loader2,
   CheckCircle2,
   ShieldCheck,
@@ -34,58 +35,40 @@ export const RightSideLeadPopup = ({ isLandingPageOpen, isLeadSubmitted, onLeadS
   const [errorMsg, setErrorMsg] = useState('');
   const [success, setSuccess] = useState(false);
 
-  // Timer refs
-  const reappearTimerRef = useRef(null);
-  const initialDelayTimerRef = useRef(null);
+  // Timer ref for auto-dismissing Thank You screen
   const autoDismissTimerRef = useRef(null);
 
   // Cleanup helper
   const clearTimers = () => {
-    if (reappearTimerRef.current) {
-      clearTimeout(reappearTimerRef.current);
-      reappearTimerRef.current = null;
-    }
-    if (initialDelayTimerRef.current) {
-      clearTimeout(initialDelayTimerRef.current);
-      initialDelayTimerRef.current = null;
-    }
     if (autoDismissTimerRef.current) {
       clearTimeout(autoDismissTimerRef.current);
       autoDismissTimerRef.current = null;
     }
   };
 
-  // When landing page opens and user hasn't submitted, show popup after a brief smooth entrance delay
+  // Close popup and cleanup
   useEffect(() => {
-    if (isLandingPageOpen && !isLeadSubmitted) {
-      clearTimers();
-      initialDelayTimerRef.current = setTimeout(() => {
-        setIsOpen(true);
-      }, 1000); // 1-second initial delay after landing page unlocks
-    } else if (!success) {
-      setIsOpen(false);
-      clearTimers();
-    }
-
     return () => clearTimers();
-  }, [isLandingPageOpen, isLeadSubmitted, success]);
+  }, []);
+
+  // Listen for Escape key to close popup when open
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
 
   // Handle user closing the popup
   const handleClose = () => {
     setIsOpen(false);
     clearTimers();
 
-    // If closing after success, finalize lead submission flag
     if (success) {
       onLeadSubmitted?.();
-      return;
-    }
-
-    if (!isLeadSubmitted) {
-      // Re-trigger popup after 10 seconds if dismissed without submitting
-      reappearTimerRef.current = setTimeout(() => {
-        setIsOpen(true);
-      }, 10000); // 10 seconds = 10,000 ms
     }
   };
 
@@ -94,10 +77,17 @@ export const RightSideLeadPopup = ({ isLandingPageOpen, isLeadSubmitted, onLeadS
     setIsOpen(false);
     clearTimers();
     onLeadSubmitted?.();
+    setSuccess(false);
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      message: '',
+    });
   };
 
-  // Handle opening manually via floating pill if user wants it sooner
-  const handleManualOpen = () => {
+  // Handle opening popup via blooming button
+  const handleOpen = () => {
     clearTimers();
     setIsOpen(true);
   };
@@ -166,29 +156,136 @@ export const RightSideLeadPopup = ({ isLandingPageOpen, isLeadSubmitted, onLeadS
     }
   };
 
-  // Only hide if landing page is not open, or if lead was already submitted previously before opening
-  if (!isLandingPageOpen || (isLeadSubmitted && !success)) return null;
+  // Only hide if landing page is not yet open
+  if (!isLandingPageOpen) return null;
 
   return (
     <aside
       aria-label="Lead Enquiry Floating Widget"
       className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end pointer-events-auto"
     >
-      {/* Minimized Pill Button: Shown when popup is closed (counts down to 10s or allows 1-click reopen) */}
-      {!isOpen && !success && (
-        <button
-          type="button"
-          onClick={handleManualOpen}
-          aria-label="Open Quick Enquiry Form"
-          className="group flex items-center gap-2.5 px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-900 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.15)] border border-slate-200/90 hover:border-amber-400 transition-all duration-300 hover:scale-105 cursor-pointer animate-in fade-in slide-in-from-bottom-4 duration-300"
-        >
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#F5A623]"></span>
-          </span>
-          <span className="text-xs font-bold tracking-wide text-slate-800">Get Free Proposal</span>
-          <Sparkles className="w-4 h-4 text-[#e28a05] group-hover:rotate-12 transition-transform" />
-        </button>
+      {/* Blooming "Start Now" Action Button matching user design */}
+      {!isOpen && (
+        <div className="relative group flex items-center justify-center select-none">
+          {/* 3 Concentric Expanding Blooming Wave Rings */}
+          <div
+            className="absolute inset-0 rounded-full animate-bloom-wave-1 pointer-events-none"
+            style={{
+              border: '2px solid rgba(254, 240, 40, 0.85)',
+              background: 'radial-gradient(ellipse at center, rgba(253, 243, 40, 0.4) 0%, rgba(255, 202, 0, 0.15) 60%, transparent 80%)',
+              boxShadow: '0 0 25px rgba(250, 240, 40, 0.6), inset 0 0 15px rgba(250, 240, 40, 0.3)',
+            }}
+          />
+          <div
+            className="absolute inset-0 rounded-full animate-bloom-wave-2 pointer-events-none"
+            style={{
+              border: '1.8px solid rgba(254, 240, 40, 0.7)',
+              background: 'radial-gradient(ellipse at center, rgba(253, 243, 40, 0.3) 0%, rgba(255, 202, 0, 0.1) 60%, transparent 80%)',
+              boxShadow: '0 0 35px rgba(250, 240, 40, 0.5), inset 0 0 20px rgba(250, 240, 40, 0.25)',
+            }}
+          />
+          <div
+            className="absolute inset-0 rounded-full animate-bloom-wave-3 pointer-events-none"
+            style={{
+              border: '1.5px solid rgba(254, 240, 40, 0.55)',
+              background: 'radial-gradient(ellipse at center, rgba(253, 243, 40, 0.2) 0%, transparent 75%)',
+              boxShadow: '0 0 45px rgba(250, 240, 40, 0.4)',
+            }}
+          />
+
+          {/* Ambient Breathing Yellow Bloom Aura */}
+          <div
+            className="absolute -inset-5 rounded-full pointer-events-none animate-aura-bloom"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(253, 243, 40, 0.7) 0%, rgba(255, 202, 0, 0.3) 50%, transparent 75%)',
+              filter: 'blur(20px)',
+            }}
+          />
+
+          {/* White Blooming Burst Rays radiating around the right curve of the pill */}
+          <svg
+            className="absolute -top-2.5 -right-3.5 w-12 h-16 pointer-events-none drop-shadow-[0_0_3px_rgba(255,255,255,0.95)] animate-burst-pulse z-20"
+            viewBox="0 0 48 64"
+            fill="none"
+            stroke="#FFFFFF"
+            strokeWidth="3.2"
+            strokeLinecap="round"
+          >
+            {/* Top 3 rays */}
+            <line x1="16" y1="12" x2="20" y2="4" />
+            <line x1="26" y1="18" x2="35" y2="11" />
+            <line x1="32" y1="28" x2="43" y2="28" />
+            {/* Bottom 2 rays */}
+            <line x1="28" y1="41" x2="37" y2="48" />
+            <line x1="19" y1="49" x2="25" y2="58" />
+          </svg>
+
+          {/* Core Pill Action Button */}
+          <button
+            type="button"
+            onClick={handleOpen}
+            aria-label="Start Now - Open Lead Enquiry Form"
+            aria-expanded={isOpen}
+            title="Start Now"
+            style={{
+              backgroundColor: '#FCF026',
+              background: 'linear-gradient(90deg, #E6F835 0%, #FCF026 45%, #FFCA00 100%)',
+              boxShadow: '0 0 35px rgba(250, 240, 40, 0.7), 0 0 65px rgba(255, 202, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.22), inset 0 2px 2px rgba(255, 255, 255, 0.6), inset 0 -2px 3px rgba(215, 165, 0, 0.35)',
+            }}
+            className="relative flex items-center gap-3 px-6 py-3.5 sm:px-7 sm:py-3.5 rounded-full text-[#0A1024] cursor-pointer hover:scale-105 active:scale-95 transition-all duration-300 select-none z-10 font-bold group animate-button-bloom overflow-hidden"
+          >
+            {/* Glossy Light Shimmer Sweep across the button */}
+            <div className="absolute inset-y-0 w-16 bg-gradient-to-r from-transparent via-white/45 to-transparent pointer-events-none animate-bloom-shimmer" />
+            {/* Origami Paper Plane Icon with 3D Fold Crease */}
+            <svg
+              className="w-5 h-5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              {/* Upper Wing */}
+              <path
+                d="M21.5 2.5L2 10.2L9.8 13.8L21.5 2.5Z"
+                fill="#0A1024"
+              />
+              {/* Lower Wing */}
+              <path
+                d="M21.5 2.5L14 22L9.8 13.8L21.5 2.5Z"
+                fill="#0A1024"
+              />
+              {/* Keel / Underbody fold */}
+              <path
+                d="M9.8 13.8L12.5 17.5L13.8 14.5L9.8 13.8Z"
+                fill="#050814"
+              />
+              {/* Center Crease Highlight Line */}
+              <path
+                d="M21.5 2.5L9.8 13.8"
+                stroke="#FDF328"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+              />
+            </svg>
+
+            {/* Start Now Label */}
+            <span className="text-[17px] sm:text-[18px] font-bold tracking-tight text-[#0A1024]">
+              Start Now
+            </span>
+
+            {/* Right Arrow Icon */}
+            <svg
+              className="w-5 h-5 shrink-0 text-[#0A1024] group-hover:translate-x-1 transition-transform"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#0A1024"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="4" y1="12" x2="19" y2="12" />
+              <polyline points="13 6 19 12 13 18" />
+            </svg>
+          </button>
+        </div>
       )}
 
       {/* Expanded Right-Side Popup Form - Bright / Light Theme */}
