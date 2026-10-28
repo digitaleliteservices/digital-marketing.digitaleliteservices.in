@@ -203,22 +203,7 @@ export const RightSideLeadPopup = ({ isLandingPageOpen, isLeadSubmitted, onLeadS
           />
 
           {/* White Blooming Burst Rays radiating around the right curve of the pill */}
-          <svg
-            className="absolute -top-2.5 -right-3.5 w-12 h-16 pointer-events-none drop-shadow-[0_0_3px_rgba(255,255,255,0.95)] animate-burst-pulse z-20"
-            viewBox="0 0 48 64"
-            fill="none"
-            stroke="#FFFFFF"
-            strokeWidth="3.2"
-            strokeLinecap="round"
-          >
-            {/* Top 3 rays */}
-            <line x1="16" y1="12" x2="20" y2="4" />
-            <line x1="26" y1="18" x2="35" y2="11" />
-            <line x1="32" y1="28" x2="43" y2="28" />
-            {/* Bottom 2 rays */}
-            <line x1="28" y1="41" x2="37" y2="48" />
-            <line x1="19" y1="49" x2="25" y2="58" />
-          </svg>
+         
 
           {/* Core Pill Action Button */}
           <button
