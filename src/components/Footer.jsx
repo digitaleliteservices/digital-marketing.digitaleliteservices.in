@@ -13,13 +13,13 @@ export const Footer = ({
 
   return (
     <footer id="contact" className="bg-[#050A18] text-slate-400 text-sm pt-16 pb-8 border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="  max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Main 4-Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-14 border-b border-white/10">
+        <div className="grid grid-cols-12 md:grid-cols-12 lg:grid-cols-12 gap-10 lg:gap-8 pb-14 border-b border-white/10">
           
           {/* Col 1: Brand Info (Spans 4) */}
-          <div className="lg:col-span-4 space-y-4">
+          <div className="lg:col-span-5 space-y-4">
             <img src={LogoImg} alt=""  className='w-34 h-33'/>
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm pt-2">
               A results-focused digital marketing agency in Bangalore helping businesses grow through creative strategies, smart technology and measurable results.
@@ -67,7 +67,7 @@ export const Footer = ({
           </div>
 
           {/* Col 2: Our Services (Spans 3) */}
-          <div className="lg:col-span-3 space-y-4">
+          {/* <div className="lg:col-span-3 space-y-4">
             <h4 className="text-white font-bold text-sm tracking-wide">
               Our Services
             </h4>
@@ -127,10 +127,10 @@ export const Footer = ({
                 </button>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Col 3: Quick Links (Spans 2) */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-3 space-y-4">
             <h4 className="text-white font-bold text-sm tracking-wide">
               Quick Links
             </h4>
@@ -151,13 +151,13 @@ export const Footer = ({
                 </a>
               </li>
               <li>
-                <button
+                {/* <button
                   type="button"
                   onClick={onOpenPortfolio}
                   className="hover:text-[#F5A623] transition-colors text-left"
                 >
                   Portfolio
-                </button>
+                </button> */}
               </li>
               <li>
                 <a href="#testimonials" className="hover:text-[#F5A623] transition-colors">
@@ -174,11 +174,11 @@ export const Footer = ({
                   Why Choose Us
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a href="#contact" className="hover:text-[#F5A623] transition-colors">
                   Contact
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
 

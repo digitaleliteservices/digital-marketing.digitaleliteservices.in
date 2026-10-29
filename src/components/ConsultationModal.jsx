@@ -150,10 +150,10 @@ export const ConsultationModal = ({
                   <span className="text-slate-400">Phone:</span>
                   <span className="font-semibold text-slate-800">{formData.phone}</span>
                 </div>
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <span className="text-slate-400">Direct Desk Hotline:</span>
                   <span className="font-semibold text-slate-800">+91 98765 43210</span>
-                </div>
+                </div> */}
               </div>
 
               <button
