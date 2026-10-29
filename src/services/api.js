@@ -67,6 +67,15 @@ export async function submitLeadEnquiry({ name, email, phone, message }) {
       throw new Error(errorMsg);
     }
 
+    // Trigger Meta Pixel 'Lead' event if pixel is initialized
+    if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+      try {
+        window.fbq('track', 'Lead');
+      } catch (err) {
+        console.warn('Meta Pixel tracking error:', err);
+      }
+    }
+
     return {
       success: true,
       message: data?.message || 'Enquiry submitted successfully!',
