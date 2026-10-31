@@ -4,25 +4,26 @@ import {
   Mail,
   Phone,
   MessageSquare,
-  Lock,
-  Unlock,
   CheckCircle2,
   Loader2,
   ShieldCheck,
   Sparkles,
   X,
+  ArrowRight,
+  Gift,
+  ChevronDown,
 } from 'lucide-react';
 import { submitLeadEnquiry } from '../services/api';
-import LogoImg from '../assets/images/logo.png';
+import DiwaliImg from '../assets/images/diwali_popup_img.png';
 
 export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
+    service: 'All-in-One Digital Marketing Suite',
     message: '',
   });
-
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [success, setSuccess] = useState(false);
@@ -43,7 +44,6 @@ export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
     e.preventDefault();
     setErrorMsg('');
 
-    // Field-level validation
     if (!formData.name.trim()) {
       setErrorMsg('Please enter your full name.');
       return;
@@ -66,230 +66,317 @@ export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
       setErrorMsg('Please enter a valid phone number (at least 7 to 15 digits).');
       return;
     }
-    if (!formData.message.trim()) {
-      setErrorMsg('Please enter a message or describe your requirements.');
-      return;
-    }
 
     setLoading(true);
 
     try {
+      // Compose message to include Diwali offer tag & selected service for sales team
+      const serviceContext = formData.service || 'Digital Marketing Services';
+      const customNotes = formData.message.trim() ? ` Notes: ${formData.message.trim()}` : '';
+      const composedMessage = `[Diwali Festive Offer - Claiming Up to 20% OFF] Interested in: ${serviceContext}.${customNotes}`;
+
       await submitLeadEnquiry({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        message: formData.message,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        message: composedMessage,
       });
 
-      // Save to storage
+      // Save submission state to storage
       try {
         sessionStorage.setItem('des_lead_submitted', 'true');
         localStorage.setItem('des_lead_submitted', 'true');
-      } catch (err) {
-        // Ignore storage errors in restricted iframes
+      } catch {
+        // Safe fallback
       }
 
       setSuccess(true);
       setLoading(false);
-
-      // Smoothly unlock after 1.2s to show success feedback
-      setTimeout(() => {
-        onSuccess?.();
-      }, 1200);
     } catch (err) {
       setLoading(false);
       setErrorMsg(err.message || 'Failed to submit enquiry. Please try again.');
     }
   };
 
+  const handleFinish = () => {
+    onSuccess?.();
+    onClose?.();
+  };
+
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-300"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-300"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           onClose?.();
         }
       }}
     >
-      <div className="relative w-full max-w-lg bg-white/95 backdrop-blur-xs text-slate-900 rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.3),0_0_1px_1px_rgba(0,0,0,0.06)] border border-slate-200/90 overflow-hidden my-auto animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-4xl bg-white text-slate-900 rounded-3xl shadow-[0_25px_70px_-15px_rgba(0,0,0,0.45),0_0_0_1px_rgba(245,166,35,0.3)] overflow-hidden my-auto flex flex-col md:flex-row animate-in zoom-in-95 duration-200 border border-amber-500/20">
         
-        {/* Close Button */}
+        {/* Prominent Circular Close Button (X) */}
         <button
           type="button"
           onClick={() => onClose?.()}
-          className="absolute top-4 right-4 z-20 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900 transition-colors cursor-pointer border border-slate-200/60 shadow-xs"
-          aria-label="Close form"
-          title="Close and view landing page"
+          className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-30 w-9 h-9 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+          aria-label="Close Diwali lead popup"
+          title="Close and continue to website"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* Subtle Decorative Ambient Lighting */}
-        <div className="absolute -top-16 -right-16 w-56 h-56 bg-amber-400/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+        {/* ========================================================= */}
+        {/* LEFT COLUMN: Diwali Promotional Graphic                   */}
+        {/* ========================================================= */}
+        <div className="relative md:w-1/2 bg-gradient-to-br from-amber-50/70 via-orange-50/30 to-amber-100/40 p-4 sm:p-6 md:p-7 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-amber-100/80 overflow-hidden">
+          {/* Subtle Ambient Festive Glow */}
+          <div className="absolute -top-16 -left-16 w-48 h-48 bg-amber-400/25 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-orange-400/20 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Top Header Banner */}
-        <div className="relative p-6 sm:p-7 pr-16 border-b border-slate-100 bg-gradient-to-b from-slate-50/90 via-slate-50/40 to-white">
-          <div className="flex items-center justify-between gap-4 mb-3">
-            <div className="flex items-center gap-2">
-              <div className="bg-[#080E21] px-3.5 py-1.5 rounded-xl shadow-xs border border-slate-800 flex items-center">
-                <img src={LogoImg} alt="Digital Elite Services" className="h-7 w-auto object-contain" />
-              </div>
-            </div>
+          {/* Festive Top Floating Pill on Mobile / Desktop */}
+          
+          {/* Diwali Popup Graphic */}
+          <div className="relative z-10 w-full flex items-center justify-center">
+            <img
+              src={DiwaliImg}
+              alt="Happy Diwali - Digital Elite Services"
+              className="w-full h-auto max-h-[300px] sm:max-h-[380px] md:max-h-[460px] object-contain rounded-2xl shadow-sm hover:scale-[1.01] transition-transform duration-300"
+            />
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 leading-snug">
-            Unlock Full Access to <br className="hidden sm:inline" />
-            <span className="text-[#e28a05]">Digital Elite Services</span>
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1.5 leading-relaxed">
-            Please complete this quick form to unlock customized digital marketing solutions, case studies, and strategic insights.
-          </p>
+          {/* Limited Period Offer Ribbon */}
+          <div className="relative z-10 mt-3 hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-xs font-semibold text-amber-950">
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+            <span>Up to 20% OFF • Valid for Diwali Festive Season</span>
+          </div>
         </div>
 
-        {/* Form Body or Success State */}
-        <div className="p-6 sm:p-7 relative bg-white">
+        {/* ========================================================= */}
+        {/* RIGHT COLUMN: Lead Enquiry Form with Up to 20% OFF Offer  */}
+        {/* ========================================================= */}
+        <div className="relative md:w-1/2 p-5 sm:p-7 md:p-8 flex flex-col justify-center bg-white overflow-y-auto max-h-[90vh] md:max-h-[620px] [scrollbar-width:thin]">
+          {/* Ambient Lighting */}
+          <div className="absolute top-0 right-0 w-36 h-36 bg-amber-300/10 rounded-full blur-3xl pointer-events-none" />
+
           {success ? (
-            <div className="py-8 text-center space-y-4 animate-in zoom-in-95 duration-200">
-              <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto border border-emerald-200 shadow-sm">
+            /* Dedicated Thank You & Offer Confirmation Screen */
+            <div className="py-6 sm:py-8 text-center space-y-4 animate-in zoom-in-95 duration-200">
+              <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white rounded-full flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/30">
                 <CheckCircle2 className="w-9 h-9" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900">Access Granted!</h3>
-              <p className="text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
-                Thank you, <strong className="text-slate-900">{formData.name}</strong>. Your enquiry has been received. Our senior Bangalore strategist will contact you shortly.
-              </p>
-              <div className="pt-3">
+
+              <div className="space-y-1.5">
+                
+                <h3 className="text-2xl font-bold text-slate-900 tracking-tight">
+                  Happy Diwali, {formData.name.split(' ')[0]}!
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
+                  Your festive enquiry has been received. Our senior Bangalore digital growth strategist will contact you within <strong className="text-slate-900">2 business hours</strong>.
+                </p>
+              </div>
+
+              {/* Offer Voucher Ticket Card */}
+              <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border border-amber-300/70 rounded-2xl p-4 text-left space-y-2 shadow-xs">
+                {/* <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-amber-800">Festive Voucher</span>
+                  <span className="text-xs font-extrabold text-amber-700 bg-amber-200/70 px-2.5 py-0.5 rounded-full">DIWALI-20-DES</span>
+                </div> */}
+                <div className="text-xs text-slate-700 space-y-1">
+                  <div><strong>Selected:</strong> {formData.service}</div>
+                  <div><strong>Contact:</strong> {formData.phone} • {formData.email}</div>
+                </div>
+              </div>
+
+              <div className="pt-2">
                 <button
                   type="button"
-                  onClick={() => onSuccess?.()}
-                  style={{ backgroundColor: '#F5A623', color: '#090d16' }}
-                  className="w-full py-3.5 px-6 rounded-full bg-[#F5A623] hover:bg-[#e69818] active:scale-[0.98] text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/25 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  onClick={handleFinish}
+                  style={{
+                    background: 'linear-gradient(135deg, #FFB800 0%, #F5A623 50%, #E28A05 100%)',
+                  }}
+                  className="w-full py-3.5 px-6 rounded-full text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/30 hover:shadow-amber-500/40 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <Unlock className="w-4 h-4 text-slate-950" />
-                  <span>Enter Landing Page</span>
+                  <span>Continue to Landing Page</span>
+                  <ArrowRight className="w-4 h-4 text-slate-950" />
                 </button>
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4 text-left">
-              {errorMsg && (
-                <div className="p-3 text-xs bg-rose-50 border border-rose-200 text-rose-700 rounded-xl font-medium">
-                  {errorMsg}
-                </div>
-              )}
-
-              {/* Name Field */}
+            /* Lead Capture Form */
+            <div className="space-y-4">
+              {/* Form Heading & Offer Callout */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                  Your Full Name <span className="text-amber-600">*</span>
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <User className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="text"
-                    required
-                    disabled={loading}
-                    placeholder="e.g. Rahul Sharma"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50/70 hover:bg-slate-50 focus:bg-white border border-slate-200 focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 rounded-xl text-sm text-slate-900 placeholder-slate-400 outline-none transition-all shadow-xs"
-                  />
+                <div className="inline-flex items-center gap-1.5 mb-1.5">
+                  <span className="w-4 h-0.5 bg-[#F5A623]" />
+                  {/* <span className="text-[11px] font-bold tracking-widest text-amber-700 uppercase flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-[#e28a05] fill-[#e28a05]" />
+                    LIMITED TIME FESTIVE PROMOTION
+                  </span> */}
                 </div>
+
+                <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">
+                  Light Up Your Brand With{' '}
+                  <span className="text-[#e28a05]">
+                    Up to 20% OFF
+                  </span>
+                </h2>
+
+                {/* <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Celebrate this Diwali with guaranteed business growth. Claim your exclusive 20% discount and free digital strategy audit today.
+                </p> */}
               </div>
 
-              {/* Email Field */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                  Work / Personal Email <span className="text-amber-600">*</span>
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <Mail className="w-4 h-4" />
+              {/* Form Element */}
+              <form onSubmit={handleSubmit} className="space-y-3 text-left">
+                {errorMsg && (
+                  <div className="p-2.5 text-xs bg-rose-50 border border-rose-200 text-rose-700 rounded-xl font-medium leading-snug">
+                    {errorMsg}
                   </div>
-                  <input
-                    type="email"
-                    required
-                    disabled={loading}
-                    placeholder="e.g. rahul@company.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50/70 hover:bg-slate-50 focus:bg-white border border-slate-200 focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 rounded-xl text-sm text-slate-900 placeholder-slate-400 outline-none transition-all shadow-xs"
-                  />
-                </div>
-              </div>
+                )}
 
-              {/* Phone Field */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                  Phone / WhatsApp Number <span className="text-amber-600">*</span>
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <Phone className="w-4 h-4" />
+                {/* Name Field */}
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                    Full Name <span className="text-amber-600">*</span>
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <User className="w-3.5 h-3.5" />
+                    </div>
+                    <input
+                      type="text"
+                      required
+                      disabled={loading}
+                      placeholder="e.g. Rahul Sharma"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full pl-9 pr-3 py-2 bg-slate-50/80 hover:bg-slate-50 focus:bg-white border border-slate-200 focus:border-amber-500 focus:ring-3 focus:ring-amber-500/10 rounded-xl text-xs text-slate-900 placeholder-slate-400 outline-none transition-all shadow-xs"
+                    />
                   </div>
-                  <input
-                    type="tel"
-                    required
-                    disabled={loading}
-                    placeholder="e.g. +91 98765 43210"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50/70 hover:bg-slate-50 focus:bg-white border border-slate-200 focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 rounded-xl text-sm text-slate-900 placeholder-slate-400 outline-none transition-all shadow-xs"
-                  />
                 </div>
-              </div>
 
-              {/* Message Field */}
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                  Your Requirements / Message <span className="text-amber-600">*</span>
-                </label>
-                <div className="relative">
-                  <div className="absolute top-3 left-3.5 pointer-events-none text-slate-400">
-                    <MessageSquare className="w-4 h-4" />
+                {/* Email & Phone Dual Inputs */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {/* Email Field */}
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                      Email Address <span className="text-amber-600">*</span>
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <Mail className="w-3.5 h-3.5" />
+                      </div>
+                      <input
+                        type="email"
+                        required
+                        disabled={loading}
+                        placeholder="e.g. rahul@company.com"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="w-full pl-9 pr-3 py-2 bg-slate-50/80 hover:bg-slate-50 focus:bg-white border border-slate-200 focus:border-amber-500 focus:ring-3 focus:ring-amber-500/10 rounded-xl text-xs text-slate-900 placeholder-slate-400 outline-none transition-all shadow-xs"
+                      />
+                    </div>
                   </div>
-                  <textarea
-                    rows={3}
-                    required
-                    disabled={loading}
-                    placeholder="Share your goals (e.g. SEO ranking, PPC leads, website redesign, social media...)"
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full pl-10 pr-3.5 py-2.5 bg-slate-50/70 hover:bg-slate-50 focus:bg-white border border-slate-200 focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 rounded-xl text-sm text-slate-900 placeholder-slate-400 outline-none transition-all resize-none shadow-xs"
-                  />
+
+                  {/* Phone Field */}
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                      Phone Number <span className="text-amber-600">*</span>
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                        <Phone className="w-3.5 h-3.5" />
+                      </div>
+                      <input
+                        type="tel"
+                        required
+                        disabled={loading}
+                        placeholder="e.g. +91 98765 43210"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="w-full pl-9 pr-3 py-2 bg-slate-50/80 hover:bg-slate-50 focus:bg-white border border-slate-200 focus:border-amber-500 focus:ring-3 focus:ring-amber-500/10 rounded-xl text-xs text-slate-900 placeholder-slate-400 outline-none transition-all shadow-xs"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              {/* Submit CTA */}
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  style={{ backgroundColor: '#F5A623', color: '#090d16' }}
-                  className="w-full py-3.5 px-6 rounded-full bg-[#F5A623] hover:bg-[#e69818] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed font-bold text-sm shadow-lg shadow-amber-500/30 hover:shadow-amber-500/40 transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
-                      <span>Submitting Enquiry...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Unlock className="w-4 h-4 text-slate-950" />
-                      <span>Submit & Unlock Landing Page</span>
-                    </>
-                  )}
-                </button>
-              </div>
+                {/* Service Selection Dropdown */}
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                    Select Service
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={formData.service}
+                      disabled={loading}
+                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                      className="w-full px-3 py-2 pr-8 bg-slate-50/80 hover:bg-slate-50 focus:bg-white border border-slate-200 focus:border-amber-500 focus:ring-3 focus:ring-amber-500/10 rounded-xl text-xs text-slate-900 outline-none transition-all appearance-none shadow-xs font-medium cursor-pointer"
+                    >
+                      <option value="All-in-One Digital Marketing Suite">All-in-One Digital Marketing Suite</option>
+                      <option value="Search Engine Optimization - SEO">Search Engine Optimization - SEO</option>
+                      <option value="Pay-Per-Click & Google Ads">Pay-Per-Click & Google Ads</option>
+                      <option value="Social Media Marketing & Meta Ads">Social Media Marketing & Meta Ads</option>
+                      <option value="High-Converting Website & Landing Pages">High-Converting Website & Landing Pages</option>
+                      <option value="Custom Marketing Strategy & Consultation">Custom Marketing Strategy & Consultation</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+                      <ChevronDown className="w-3.5 h-3.5" />
+                    </div>
+                  </div>
+                </div>
 
-              {/* Assurance note */}
-              <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-500 pt-1 text-center">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                <span>100% Privacy Guaranteed • Zero Spam • Instant Access</span>
-              </div>
-            </form>
+                {/* Requirements / Custom Note */}
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                    Your Requirements / Goals (Optional)
+                  </label>
+                  <div className="relative">
+                    <div className="absolute top-2.5 left-3 pointer-events-none text-slate-400">
+                      <MessageSquare className="w-3.5 h-3.5" />
+                    </div>
+                    <textarea
+                      rows={2}
+                      disabled={loading}
+                      placeholder="Share your business goals (e.g. generate more leads, scale brand reach...)"
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      className="w-full pl-9 pr-3 py-2 bg-slate-50/80 hover:bg-slate-50 focus:bg-white border border-slate-200 focus:border-amber-500 focus:ring-3 focus:ring-amber-500/10 rounded-xl text-xs text-slate-900 placeholder-slate-400 outline-none transition-all resize-none shadow-xs"
+                    />
+                  </div>
+                </div>
+
+
+                {/* Submit CTA Button */}
+                <div className="pt-1.5">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    style={{
+                      background: 'linear-gradient(135deg, #FFB800 0%, #F5A623 50%, #E28A05 100%)',
+                    }}
+                    className="w-full py-3 px-5 rounded-full text-slate-950 font-bold text-xs sm:text-sm tracking-wide shadow-md shadow-amber-500/30 hover:shadow-amber-500/40 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 cursor-pointer uppercase"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
+                        <span>Securing 20% Discount...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>CLAIM UP TO 20% OFF NOW</span>
+                        <ArrowRight className="w-4 h-4 text-slate-950" />
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Privacy & Trust Guarantee */}
+                <div className="flex items-center justify-center gap-1.5 text-[10px] text-slate-500 pt-0.5 text-center">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>100% Privacy Protected • Zero Spam • Instant Bangalore Expert Call</span>
+                </div>
+              </form>
+            </div>
           )}
         </div>
 
@@ -297,3 +384,4 @@ export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
     </div>
   );
 };
+

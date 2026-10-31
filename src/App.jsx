@@ -48,11 +48,7 @@ export default function App() {
       const submitted =
         sessionStorage.getItem('des_lead_submitted') === 'true' ||
         localStorage.getItem('des_lead_submitted') === 'true';
-      if (submitted) return false;
-
-      // Check if user dismissed mandatory modal in current session
-      const dismissed = sessionStorage.getItem('des_mandatory_dismissed') === 'true';
-      return !dismissed;
+      return !submitted;
     } catch {
       return true;
     }
@@ -60,11 +56,6 @@ export default function App() {
 
   const handleCloseMandatoryModal = () => {
     setMandatoryModalOpen(false);
-    try {
-      sessionStorage.setItem('des_mandatory_dismissed', 'true');
-    } catch {
-      // Ignore storage errors
-    }
   };
 
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
@@ -252,11 +243,12 @@ export default function App() {
         />
       </div>
 
-      {/* Floating Lead Popup on the right side of the landing page: closable and reappears 40s after closing */}
+      {/* Floating Lead Popup on the right side of the landing page: closable and reappears */}
       <RightSideLeadPopup
         isLandingPageOpen={!mandatoryModalOpen}
         isLeadSubmitted={isLeadSubmitted}
         onLeadSubmitted={() => setIsLeadSubmitted(true)}
+        onOpenLeadModal={() => setMandatoryModalOpen(true)}
       />
     </>
   );

@@ -22,7 +22,12 @@ import { submitLeadEnquiry } from '../services/api';
  * Bright / Light theme with warm amber brand accents.
  * Displays dedicated Thank You confirmation screen upon successful form submission.
  */
-export const RightSideLeadPopup = ({ isLandingPageOpen, isLeadSubmitted, onLeadSubmitted }) => {
+export const RightSideLeadPopup = ({
+  isLandingPageOpen,
+  isLeadSubmitted,
+  onLeadSubmitted,
+  onOpenLeadModal,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -88,6 +93,10 @@ export const RightSideLeadPopup = ({ isLandingPageOpen, isLeadSubmitted, onLeadS
 
   // Handle opening popup via blooming button
   const handleOpen = () => {
+    if (onOpenLeadModal) {
+      onOpenLeadModal();
+      return;
+    }
     clearTimers();
     setIsOpen(true);
   };
@@ -251,9 +260,9 @@ export const RightSideLeadPopup = ({ isLandingPageOpen, isLeadSubmitted, onLeadS
               />
             </svg>
 
-            {/* Start Now Label */}
-            <span className="text-[17px] sm:text-[18px] font-bold tracking-tight text-[#0A1024]">
-              Start Now
+            {/* Start Now / Claim 20% OFF Label */}
+            <span className="text-[15px] sm:text-[16px] font-bold tracking-tight text-[#0A1024] flex items-center gap-1.5 whitespace-nowrap">
+              <span>Claim 20% OFF</span>
             </span>
 
             {/* Right Arrow Icon */}
