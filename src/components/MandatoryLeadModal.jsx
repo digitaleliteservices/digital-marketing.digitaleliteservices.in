@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { submitLeadEnquiry } from '../services/api';
 import DiwaliImg from '../assets/images/diwali_popup_img.png';
+import DESLogo from "../assets/images/des_logo.png"
 
 export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
   const [formData, setFormData] = useState({
@@ -161,8 +162,8 @@ export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
           {success ? (
             /* Dedicated Thank You & Offer Confirmation Screen */
             <div className="py-6 sm:py-8 text-center space-y-4 animate-in zoom-in-95 duration-200">
-              <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white rounded-full flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/30">
-                <CheckCircle2 className="w-9 h-9" />
+              <div className="w-16 h-16  rounded-full flex items-center justify-center mx-auto">
+                <img src={DESLogo} alt="DES Logo" className='w-full h-full object-contain rounded-full' />
               </div>
 
               <div className="space-y-1.5">
