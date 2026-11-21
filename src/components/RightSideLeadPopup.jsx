@@ -260,9 +260,9 @@ export const RightSideLeadPopup = ({
               />
             </svg>
 
-            {/* Start Now / Claim 20% OFF Label */}
+            {/* Start Now / Get Consultation Label */}
             <span className="text-[15px] sm:text-[16px] font-bold tracking-tight text-[#0A1024] flex items-center gap-1.5 whitespace-nowrap">
-              <span>Claim 20% OFF</span>
+              <span>Get Consultation</span>
             </span>
 
             {/* Right Arrow Icon */}

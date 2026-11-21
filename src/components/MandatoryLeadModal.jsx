@@ -4,18 +4,14 @@ import {
   Mail,
   Phone,
   MessageSquare,
-  CheckCircle2,
   Loader2,
   ShieldCheck,
-  Sparkles,
   X,
   ArrowRight,
-  Gift,
   ChevronDown,
 } from 'lucide-react';
 import { submitLeadEnquiry } from '../services/api';
-import DiwaliImg from '../assets/images/diwali_popup_img.png';
-import DESLogo from "../assets/images/des_logo.png"
+import DESLogo from "../assets/images/des_logo.png";
 
 export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
   const [formData, setFormData] = useState({
@@ -71,10 +67,10 @@ export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
     setLoading(true);
 
     try {
-      // Compose message to include Diwali offer tag & selected service for sales team
+      // Compose message to include selected service for sales team
       const serviceContext = formData.service || 'Digital Marketing Services';
       const customNotes = formData.message.trim() ? ` Notes: ${formData.message.trim()}` : '';
-      const composedMessage = `[Diwali Festive Offer - Claiming Up to 20% OFF] Interested in: ${serviceContext}.${customNotes}`;
+      const composedMessage = `[Strategy Consultation Request] Interested in: ${serviceContext}.${customNotes}`;
 
       await submitLeadEnquiry({
         name: formData.name.trim(),
@@ -106,84 +102,51 @@ export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-300"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-300"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           onClose?.();
         }
       }}
     >
-      <div className="relative w-full max-w-4xl bg-white text-slate-900 rounded-3xl shadow-[0_25px_70px_-15px_rgba(0,0,0,0.45),0_0_0_1px_rgba(245,166,35,0.3)] overflow-hidden my-auto flex flex-col md:flex-row animate-in zoom-in-95 duration-200 border border-amber-500/20">
+      <div className="relative w-full max-w-lg bg-white text-slate-900 rounded-3xl shadow-[0_25px_70px_-15px_rgba(0,0,0,0.45)] overflow-hidden my-auto animate-in zoom-in-95 duration-200 border border-slate-200/80">
         
         {/* Prominent Circular Close Button (X) */}
         <button
           type="button"
           onClick={() => onClose?.()}
-          className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-30 w-9 h-9 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-95 cursor-pointer"
-          aria-label="Close Diwali lead popup"
+          className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 z-30 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-950 flex items-center justify-center shadow-xs transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+          aria-label="Close lead popup"
           title="Close and continue to website"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
 
-        {/* ========================================================= */}
-        {/* LEFT COLUMN: Diwali Promotional Graphic                   */}
-        {/* ========================================================= */}
-        <div className="relative md:w-1/2 bg-gradient-to-br from-amber-50/70 via-orange-50/30 to-amber-100/40 p-4 sm:p-6 md:p-7 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-amber-100/80 overflow-hidden">
-          {/* Subtle Ambient Festive Glow */}
-          <div className="absolute -top-16 -left-16 w-48 h-48 bg-amber-400/25 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-orange-400/20 rounded-full blur-3xl pointer-events-none" />
+        {/* Ambient Glow */}
+        <div className="absolute top-0 right-0 w-48 h-48 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
 
-          {/* Festive Top Floating Pill on Mobile / Desktop */}
-          
-          {/* Diwali Popup Graphic */}
-          <div className="relative z-10 w-full flex items-center justify-center">
-            <img
-              src={DiwaliImg}
-              alt="Happy Diwali - Digital Elite Services"
-              className="w-full h-auto max-h-[300px] sm:max-h-[380px] md:max-h-[460px] object-contain rounded-2xl shadow-sm hover:scale-[1.01] transition-transform duration-300"
-            />
-          </div>
-
-          {/* Limited Period Offer Ribbon */}
-          <div className="relative z-10 mt-3 hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/25 text-xs font-semibold text-amber-950">
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-            <span>Up to 20% OFF • Valid for Diwali Festive Season</span>
-          </div>
-        </div>
-
-        {/* ========================================================= */}
-        {/* RIGHT COLUMN: Lead Enquiry Form with Up to 20% OFF Offer  */}
-        {/* ========================================================= */}
-        <div className="relative md:w-1/2 p-5 sm:p-7 md:p-8 flex flex-col justify-center bg-white overflow-y-auto max-h-[90vh] md:max-h-[620px] [scrollbar-width:thin]">
-          {/* Ambient Lighting */}
-          <div className="absolute top-0 right-0 w-36 h-36 bg-amber-300/10 rounded-full blur-3xl pointer-events-none" />
-
+        <div className="relative p-5 sm:p-7 flex flex-col justify-center bg-white">
           {success ? (
-            /* Dedicated Thank You & Offer Confirmation Screen */
+            /* Dedicated Thank You Screen */
             <div className="py-6 sm:py-8 text-center space-y-4 animate-in zoom-in-95 duration-200">
-              <div className="w-16 h-16  rounded-full flex items-center justify-center mx-auto">
-                <img src={DESLogo} alt="DES Logo" className='w-full h-full object-contain rounded-full' />
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto shadow-sm">
+                <img src={DESLogo} alt="DES Logo" className="w-full h-full object-contain rounded-full" />
               </div>
 
               <div className="space-y-1.5">
-                
                 <h3 className="text-2xl font-bold text-slate-900 tracking-tight">
-                  Happy Diwali, {formData.name.split(' ')[0]}!
+                  Thank You, {formData.name.split(' ')[0]}!
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
-                  Your festive enquiry has been received. Our senior Bangalore digital growth strategist will contact you within <strong className="text-slate-900">2 business hours</strong>.
+                  Your consultation request has been received. Our senior Bangalore digital growth strategist will contact you within <strong className="text-slate-900">2 business hours</strong>.
                 </p>
               </div>
 
-              {/* Offer Voucher Ticket Card */}
-              <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border border-amber-300/70 rounded-2xl p-4 text-left space-y-2 shadow-xs">
-                {/* <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-amber-800">Festive Voucher</span>
-                  <span className="text-xs font-extrabold text-amber-700 bg-amber-200/70 px-2.5 py-0.5 rounded-full">DIWALI-20-DES</span>
-                </div> */}
+              {/* Consultation Details Card */}
+              <div className="bg-gradient-to-r from-amber-50/80 via-orange-50/40 to-amber-50/80 border border-amber-200/80 rounded-2xl p-4 text-left space-y-1.5 shadow-xs">
                 <div className="text-xs text-slate-700 space-y-1">
-                  <div><strong>Selected:</strong> {formData.service}</div>
+                  <div><strong>Selected Service:</strong> {formData.service}</div>
                   <div><strong>Contact:</strong> {formData.phone} • {formData.email}</div>
                 </div>
               </div>
@@ -205,26 +168,32 @@ export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
           ) : (
             /* Lead Capture Form */
             <div className="space-y-4">
-              {/* Form Heading & Offer Callout */}
+              {/* Form Heading & Brand Callout */}
               <div>
-                <div className="inline-flex items-center gap-1.5 mb-1.5">
-                  <span className="w-4 h-0.5 bg-[#F5A623]" />
-                  {/* <span className="text-[11px] font-bold tracking-widest text-amber-700 uppercase flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-[#e28a05] fill-[#e28a05]" />
-                    LIMITED TIME FESTIVE PROMOTION
-                  </span> */}
+                <div className="flex items-center gap-2.5 mb-2.5">
+                  <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center shadow-xs">
+                    <img src={DESLogo} alt="Digital Elite Services Logo" className="w-full h-full object-contain" />
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold tracking-wider text-slate-900 uppercase block leading-none">
+                      Digital Elite Service
+                    </span>
+                    <span className="text-[10px] text-amber-600 font-semibold block mt-0.5">
+                      Bangalore Digital Growth Agency
+                    </span>
+                  </div>
                 </div>
 
                 <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">
-                  Light Up Your Brand With{' '}
+                  Accelerate Your Digital Growth With{' '}
                   <span className="text-[#e28a05]">
-                    Up to 20% OFF
+                    DES
                   </span>
                 </h2>
 
-                {/* <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                  Celebrate this Diwali with guaranteed business growth. Claim your exclusive 20% discount and free digital strategy audit today.
-                </p> */}
+                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Connect with our senior digital strategists for a custom marketing audit and high-converting growth roadmap.
+                </p>
               </div>
 
               {/* Form Element */}
@@ -346,7 +315,6 @@ export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
                   </div>
                 </div>
 
-
                 {/* Submit CTA Button */}
                 <div className="pt-1.5">
                   <button
@@ -360,11 +328,11 @@ export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
                     {loading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
-                        <span>Securing 20% Discount...</span>
+                        <span>Submitting Request...</span>
                       </>
                     ) : (
                       <>
-                        <span>CLAIM UP TO 20% OFF NOW</span>
+                        <span>GET FREE CONSULTATION</span>
                         <ArrowRight className="w-4 h-4 text-slate-950" />
                       </>
                     )}
@@ -385,4 +353,3 @@ export const MandatoryLeadModal = ({ isOpen, onSuccess, onClose }) => {
     </div>
   );
 };
-
