@@ -1,7 +1,7 @@
 import React from 'react';
-import groupImg1 from '../assets/images/group-img-1.png';
-import groupImg2 from '../assets/images/group-img-2.png';
-import groupImg3 from '../assets/images/group-img-3.png';
+import groupImg1 from '../assets/images/group-img-1.webp';
+import groupImg2 from '../assets/images/group-img-2.webp';
+import groupImg3 from '../assets/images/group-img-3.webp';
 
 
 /**
