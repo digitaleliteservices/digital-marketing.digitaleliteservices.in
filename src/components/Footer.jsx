@@ -22,7 +22,7 @@ export const Footer = ({
           <div className="lg:col-span-5 space-y-4">
             <img src={LogoImg} alt=""  className='w-34 h-33'/>
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm pt-2">
-              A results-focused digital marketing agency in Bangalore helping businesses grow through creative strategies, smart technology and measurable results.
+              A results-focused digital marketing company in Bangalore helping businesses grow through creative strategies, smart technology and measurable results.
             </p>
 
             {/* Social Icons row */}

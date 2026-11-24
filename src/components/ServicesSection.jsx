@@ -132,7 +132,7 @@ export const ServicesSection = ({ onSelectService }) => {
           </div>
 
           <h2 className="section-title tracking-tight text-slate-900">
-            Comprehensive Digital Marketing Services
+            Comprehensive Digital Marketing Company
           </h2>
 
           <p className="section-subtitle text-slate-600 max-w-2xl mx-auto">

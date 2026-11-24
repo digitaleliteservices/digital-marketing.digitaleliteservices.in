@@ -101,7 +101,7 @@ export const FragmentedTrapSection = ({ onOpenConsultation }) => {
                         <Search className="w-5 h-5 stroke-[2.5]" />
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-[#0A2240]">Agency A</div>
+                        <div className="text-sm font-bold text-[#0A2240]">Company A</div>
                         <div className="text-xs text-[#64748B]">SEO</div>
                       </div>
                     </div>
@@ -119,7 +119,7 @@ export const FragmentedTrapSection = ({ onOpenConsultation }) => {
                         </svg>
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-[#0A2240]">Agency B</div>
+                        <div className="text-sm font-bold text-[#0A2240]">Company B</div>
                         <div className="text-xs text-[#64748B]">Ads</div>
                       </div>
                     </div>
@@ -132,7 +132,7 @@ export const FragmentedTrapSection = ({ onOpenConsultation }) => {
                         <Code2 className="w-5 h-5 stroke-[2.5]" />
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-[#0A2240]">Agency C</div>
+                        <div className="text-sm font-bold text-[#0A2240]">Company C</div>
                         <div className="text-xs text-[#64748B]">Dev</div>
                       </div>
                     </div>
