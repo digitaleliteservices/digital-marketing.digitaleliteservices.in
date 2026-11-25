@@ -29,6 +29,7 @@ export const RightSideLeadPopup = ({
   onOpenLeadModal,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showCallNow, setShowCallNow] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -55,6 +56,27 @@ export const RightSideLeadPopup = ({
   useEffect(() => {
     return () => clearTimers();
   }, []);
+
+  // Hide Call Now button while the Hero section (#home) is in view
+  useEffect(() => {
+    if (!isLandingPageOpen) return;
+
+    const heroEl = document.getElementById('home');
+    if (!heroEl) {
+      setShowCallNow(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowCallNow(!entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(heroEl);
+    return () => observer.disconnect();
+  }, [isLandingPageOpen]);
 
   // Listen for Escape key to close popup when open
   useEffect(() => {
@@ -171,11 +193,24 @@ export const RightSideLeadPopup = ({
   return (
     <aside
       aria-label="Lead Enquiry Floating Widget"
-      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end pointer-events-auto"
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3 pointer-events-auto"
     >
-      {/* Blooming "Start Now" Action Button matching user design */}
+      {/* Floating Call Now & Get Consultation Action Buttons */}
       {!isOpen && (
-        <div className="relative group flex items-center justify-center select-none">
+        <>
+          {showCallNow && (
+            <a
+              href="tel:+916366930178"
+              aria-label="Call Now at +91 6366930178"
+              title="Call +91 6366930178"
+              className="relative z-20 flex items-center gap-2.5 px-5 py-2.5 sm:px-6 sm:py-3 rounded-full bg-[#0A1024] hover:bg-[#121c3d] text-white border border-white/20 shadow-[0_8px_24px_rgba(0,0,0,0.3)] hover:scale-105 active:scale-95 transition-all duration-300 select-none font-bold text-sm sm:text-[15px] whitespace-nowrap"
+            >
+              <Phone className="w-4 h-4 text-[#F5A623] shrink-0" />
+              <span>Call Now</span>
+            </a>
+          )}
+
+          <div className="relative group flex items-center justify-center select-none">
           {/* 3 Concentric Expanding Blooming Wave Rings */}
           <div
             className="absolute inset-0 rounded-full animate-bloom-wave-1 pointer-events-none"
@@ -280,6 +315,7 @@ export const RightSideLeadPopup = ({
             </svg>
           </button>
         </div>
+        </>
       )}
 
       {/* Expanded Right-Side Popup Form - Bright / Light Theme */}

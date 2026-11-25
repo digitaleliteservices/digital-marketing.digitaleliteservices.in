@@ -12,15 +12,15 @@ export const Footer = ({
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer id="contact" className="bg-[#050A18] text-slate-400 text-sm pt-16 pb-8 border-t border-white/5">
+    <footer id="contact" className="bg-[#050A18] text-slate-400 text-sm pt-12 sm:pt-16 pb-32 sm:pb-10 lg:pb-8 border-t border-white/5">
       <div className="  max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Main 4-Column Grid */}
-        <div className="grid grid-cols-12 md:grid-cols-12 lg:grid-cols-12 gap-10 lg:gap-8 pb-14 border-b border-white/10">
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-8 pb-12 sm:pb-14 border-b border-white/10">
           
-          {/* Col 1: Brand Info (Spans 4) */}
-          <div className="lg:col-span-5 space-y-4">
-            <img src={LogoImg} alt=""  className='w-34 h-33'/>
+          {/* Col 1: Brand Info */}
+          <div className="sm:col-span-2 lg:col-span-5 space-y-4">
+            <img src={LogoImg} alt="Digital Elite Services" className='w-34 h-33 object-contain'/>
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm pt-2">
               A results-focused digital marketing company in Bangalore helping businesses grow through creative strategies, smart technology and measurable results.
             </p>
@@ -150,15 +150,15 @@ export const Footer = ({
                   Services
                 </a>
               </li>
-              <li>
-                {/* <button
+              {/* <li>
+                <button
                   type="button"
                   onClick={onOpenPortfolio}
                   className="hover:text-[#F5A623] transition-colors text-left"
                 >
                   Portfolio
-                </button> */}
-              </li>
+                </button>
+              </li> */}
               <li>
                 <a href="#testimonials" className="hover:text-[#F5A623] transition-colors">
                   Testimonials
@@ -182,8 +182,8 @@ export const Footer = ({
             </ul>
           </div>
 
-          {/* Col 4: Contact Us (Spans 3) */}
-          <div className="lg:col-span-3 space-y-4">
+          {/* Col 4: Contact Us (Spans 4) */}
+          <div className="lg:col-span-4 space-y-4">
             <h4 className="text-white font-bold text-sm tracking-wide">
               Contact Us
             </h4>
@@ -200,7 +200,7 @@ export const Footer = ({
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-[#F5A623] shrink-0" />
-                <a href="mailto:info@digitaleliteservices.in" className="hover:text-white transition-colors break-all">
+                <a href="mailto:info@digitaleliteservices.in" className="hover:text-white transition-colors break-words">
                   info@digitaleliteservices.in
                 </a>
               </li>
